@@ -40,6 +40,24 @@ body {
     color: #ffffff;
 }
 
+.intro {
+    padding: 20px 30px 10px;
+    max-width: 900px;
+}
+
+.intro h1 {
+    font-size: 32px;
+    font-weight: 600;
+    margin-bottom: 10px;
+}
+
+.intro p {
+    font-size: 16px;
+    line-height: 1.6;
+    opacity: 0.8;
+}
+
+
 /*
 ==================================================
 3. Layout wrapper
@@ -92,10 +110,11 @@ body {
 
 .gallery img {
     width: 100%;
-    height: 100%;
+    height: 450px !important;
     object-fit: cover;
     display: block;
     border-radius: 4px;
+    object-position: center;
 }
 
 /*
