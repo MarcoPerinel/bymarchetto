@@ -9,93 +9,106 @@
 </head>
 
 <script>
-/*
-==================================================
-Configurazione GitHub
-==================================================
-*/
-const username = 'MarcoPerinel';
-const repo = 'bymarchetto';
-const branch = 'main';
-const folder = 'bymarchetto/assets/img';
+document.addEventListener('DOMContentLoaded', () => {
 
-const apiUrl = `https://api.github.com/repos/${username}/${repo}/contents/${folder}?ref=${branch}`;
+    /*
+    ==================================================
+    Configurazione GitHub
+    ==================================================
+    */
+    const username = 'MarcoPerinel';
+    const repo = 'bymarchetto';
+    const branch = 'main';
+    const folder = 'bymarchetto/assets/img';
 
-/*
-==================================================
-Elementi DOM
-==================================================
-*/
-const gallery = document.getElementById('gallery');
-const lightbox = document.getElementById('lightbox');
-const lightboxImg = lightbox.querySelector('img');
+    const apiUrl = `https://api.github.com/repos/${username}/${repo}/contents/${folder}?ref=${branch}`;
 
-/*
-==================================================
-Caricamento immagini
-==================================================
-*/
-fetch(apiUrl)
-    .then(response => {
-        if (!response.ok) {
-            throw new Error('GitHub API error ' + response.status);
-        }
-        return response.json();
-    })
-    .then(files => {
-        if (!Array.isArray(files)) {
-            throw new Error('Risposta GitHub non valida');
-        }
+    /*
+    ==================================================
+    Elementi DOM
+    ==================================================
+    */
+    const gallery = document.getElementById('gallery');
+    const lightbox = document.getElementById('lightbox');
 
-        files
-            .filter(file => /\.(webp|jpe?g|png)$/i.test(file.name))
-            .forEach(file => {
-                const img = document.createElement('img');
-                img.src = file.download_url;
-                img.loading = 'lazy';
+    if (!gallery || !lightbox) {
+        console.error('Gallery o lightbox non trovati nel DOM');
+        return;
+    }
 
-                img.addEventListener('click', () => {
-                    openLightbox(file.download_url);
+    const lightboxImg = lightbox.querySelector('img');
+
+    /*
+    ==================================================
+    Caricamento immagini
+    ==================================================
+    */
+    fetch(apiUrl)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('GitHub API error ' + response.status);
+            }
+            return response.json();
+        })
+        .then(files => {
+            if (!Array.isArray(files)) {
+                throw new Error('Risposta GitHub non valida');
+            }
+
+            files
+                .filter(file => /\.(webp|jpe?g|png)$/i.test(file.name))
+                .forEach(file => {
+                    const img = document.createElement('img');
+                    img.src = file.download_url;
+                    img.loading = 'lazy';
+
+                    img.addEventListener('click', () => {
+                        openLightbox(file.download_url);
+                    });
+
+                    gallery.appendChild(img);
                 });
+        })
+        .catch(error => {
+            console.error('Errore caricamento immagini:', error.message);
+        });
 
-                gallery.appendChild(img);
-            });
-    })
-    .catch(error => {
-        console.error('Errore caricamento immagini:', error.message);
+    /*
+    ==================================================
+    Lightbox
+    ==================================================
+    */
+    function openLightbox(src) {
+        lightboxImg.src = src;
+        lightbox.classList.add('active');
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeLightbox() {
+        lightbox.classList.remove('active');
+        lightboxImg.src = '';
+        document.body.style.overflow = '';
+    }
+
+    lightbox.addEventListener('click', closeLightbox);
+
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+            closeLightbox();
+        }
     });
 
-/*
-==================================================
-Lightbox
-==================================================
-*/
-function openLightbox(src) {
-    lightboxImg.src = src;
-    lightbox.classList.add('active');
-    document.body.style.overflow = 'hidden';
-}
-
-function closeLightbox() {
-    lightbox.classList.remove('active');
-    lightboxImg.src = '';
-    document.body.style.overflow = '';
-}
-
-lightbox.addEventListener('click', closeLightbox);
-
-document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape') {
-        closeLightbox();
+    /*
+    ==================================================
+    Anno footer
+    ==================================================
+    */
+    const year = document.getElementById('year');
+    if (year) {
+        year.textContent = new Date().getFullYear();
     }
-});
 
-/*
-==================================================
-Anno automatico footer
-==================================================
-*/
-document.getElementById('year').textContent = new Date().getFullYear();
+});
 </script>
 
 <body>
