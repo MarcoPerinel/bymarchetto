@@ -4,10 +4,17 @@ INDICE
 ==================================================
 1. Reset & base
 2. Body
-3. Header
-4. Loghi
-5. Gallery
-6. Footer
+3. Layout wrapper
+4. Header
+5. Loghi
+6. Gallery
+7. Footer
+8. Responsive
+   8.1 Widescreen
+   8.2 Laptop
+   8.3 Tablet orizzontale
+   8.4 Tablet verticale
+   8.5 Smartphone
 ==================================================
 */
 
@@ -35,7 +42,17 @@ body {
 
 /*
 ==================================================
-3. Header
+3. Layout wrapper
+==================================================
+*/
+.site-wrapper {
+    max-width: 1600px;
+    margin: 0 auto;
+}
+
+/*
+==================================================
+4. Header
 ==================================================
 */
 .site-header {
@@ -46,7 +63,7 @@ body {
 
 /*
 ==================================================
-4. Loghi
+5. Loghi
 ==================================================
 */
 .logo-wrapper {
@@ -56,20 +73,21 @@ body {
 }
 
 .logo-wrapper img {
-    max-height: 80px;
-    width: auto;
+    width: 330px;
+    height: 135px;
+    object-fit: cover;
 }
 
 /*
 ==================================================
-5. Gallery
+6. Gallery
 ==================================================
 */
 .gallery {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
     gap: 20px;
-    padding: 20px;
+    padding: 20px 30px;
 }
 
 .gallery img {
@@ -82,7 +100,7 @@ body {
 
 /*
 ==================================================
-6. Footer
+7. Footer
 ==================================================
 */
 .site-footer {
@@ -90,4 +108,104 @@ body {
     padding: 30px 20px;
     font-size: 14px;
     opacity: 0.7;
+}
+
+/*
+==================================================
+8. Responsive
+==================================================
+*/
+
+/*
+--------------------------------------------------
+8.1 Widescreen (≥ 1600px)
+--------------------------------------------------
+*/
+@media (min-width: 1600px) {
+    .site-wrapper {
+        max-width: 1800px;
+    }
+
+    .gallery {
+        grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+        gap: 30px;
+        padding: 40px;
+    }
+}
+
+/*
+--------------------------------------------------
+8.2 Laptop (≤ 1440px)
+--------------------------------------------------
+*/
+@media (max-width: 1440px) {
+    .logo-wrapper img {
+        width: 280px;
+        height: 110px;
+    }
+}
+
+/*
+--------------------------------------------------
+8.3 Tablet orizzontale (≤ 1024px)
+--------------------------------------------------
+*/
+@media (max-width: 1024px) {
+    .logo-wrapper {
+        gap: 30px;
+    }
+
+    .logo-wrapper img {
+        width: 240px;
+        height: 95px;
+    }
+
+    .gallery {
+        gap: 16px;
+        padding: 20px;
+    }
+}
+
+/*
+--------------------------------------------------
+8.4 Tablet verticale (≤ 768px)
+--------------------------------------------------
+*/
+@media (max-width: 768px) {
+    .site-header {
+        padding: 30px 15px;
+    }
+
+    .logo-wrapper {
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .logo-wrapper img {
+        width: 220px;
+        height: auto;
+    }
+
+    .gallery {
+        grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+        padding: 15px;
+    }
+}
+
+/*
+--------------------------------------------------
+8.5 Smartphone (≤ 480px)
+--------------------------------------------------
+*/
+@media (max-width: 480px) {
+    .gallery {
+        grid-template-columns: 1fr;
+        gap: 14px;
+        padding: 10px;
+    }
+
+    .site-footer {
+        font-size: 13px;
+        padding: 20px 10px;
+    }
 }
