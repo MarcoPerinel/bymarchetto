@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>bymarchetto.it</title>
+    <meta name="description" content="Showroom fotografico bymarchetto">
+    <script src="https://kit.fontawesome.com/b2f596d9b8.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="assets/css/style.css">
+</head>
+
+<script>
+    const username = 'MarcoPerinel';
+    const repo = 'bymarchetto';
+    const branch = 'main';
+    const folder = 'assets/img';
+
+    const apiUrl = `https://api.github.com/repos/${username}/${repo}/contents/${folder}?ref=${branch}`;
+
+    fetch(apiUrl)
+    .then(res => res.json())
+    .then(files => {
+        const gallery = document.getElementById('gallery');
+
+        files
+        .filter(file => /\.(webp|jpg|jpeg|png)$/i.test(file.name))
+        .forEach(file => {
+            const img = document.createElement('img');
+            img.src = file.download_url;
+            img.loading = 'lazy';
+            gallery.appendChild(img);
+        });
+    })
+    .catch(err => {
+        console.error('Errore caricamento immagini:', err);
+    });
+</script>
+
+
+<body>
+
+    <header class="site-header">
+        <div class="logo-wrapper">
+            <img src="assets/img/logo-1.png" alt="Logo bymarchetto 1">
+            <img src="assets/img/logo-2.png" alt="Logo bymarchetto 2">
+        </div>
+    </header>
+
+    <main class="gallery">
+
+    </main>
+
+    <footer class="site-footer">
+        <p>bymarchetto © <span id="year"></span></p>
+        <a href="https://www.iubenda.com/privacy-policy/49726469" class="iubenda-white iubenda-noiframe iubenda-embed iubenda-noiframe " title="Privacy Policy ">Privacy Policy</a><script type="text/javascript">(function (w,d) {var loader = function () {var s = d.createElement("script"), tag = d.getElementsByTagName("script")[0]; s.src="https://cdn.iubenda.com/iubenda.js"; tag.parentNode.insertBefore(s,tag);}; if(w.addEventListener){w.addEventListener("load", loader, false);}else if(w.attachEvent){w.attachEvent("onload", loader);}else{w.onload = loader;}})(window, document);</script>
+        <a href="https://www.iubenda.com/privacy-policy/49726469/cookie-policy" class="iubenda-white iubenda-noiframe iubenda-embed iubenda-noiframe " title="Cookie Policy ">Cookie Policy</a><script type="text/javascript">(function (w,d) {var loader = function () {var s = d.createElement("script"), tag = d.getElementsByTagName("script")[0]; s.src="https://cdn.iubenda.com/iubenda.js"; tag.parentNode.insertBefore(s,tag);}; if(w.addEventListener){w.addEventListener("load", loader, false);}else if(w.attachEvent){w.attachEvent("onload", loader);}else{w.onload = loader;}})(window, document);</script>
+    </footer>
+
+    <script>
+        document.getElementById('year').textContent = new Date().getFullYear();
+    </script>
+
+</body>
+</html>
