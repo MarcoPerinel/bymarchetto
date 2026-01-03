@@ -152,6 +152,31 @@ body {
     cursor: zoom-out;
 }
 
+.gallery img {
+    position: relative;
+    cursor: pointer;
+}
+
+.gallery img::after {
+    content: "Apri";
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.55);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    opacity: 0;
+    transition: opacity 0.25s ease;
+    pointer-events: none;
+}
+
+.gallery img:hover::after {
+    opacity: 1;
+}
+
 
 /*
 ==================================================
