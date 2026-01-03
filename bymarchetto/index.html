@@ -10,31 +10,41 @@
 </head>
 
 <script>
-    const username = 'MarcoPerinel';
-    const repo = 'bymarchetto';
-    const branch = 'main';
-    const folder = 'assets/img';
+const username = 'MarcoPerinel';
+const repo = 'bymarchetto';
+const branch = 'main';
+const folder = 'bymarchetto/assets/img';
 
-    const apiUrl = `https://api.github.com/repos/${username}/${repo}/contents/${folder}?ref=${branch}`;
+const apiUrl = `https://api.github.com/repos/${username}/${repo}/contents/${folder}?ref=${branch}`;
 
-    fetch(apiUrl)
-    .then(res => res.json())
-    .then(files => {
-        const gallery = document.getElementById('gallery');
+fetch(apiUrl)
+  .then(response => {
+    if (!response.ok) {
+      throw new Error('GitHub API error ' + response.status);
+    }
+    return response.json();
+  })
+  .then(files => {
+    if (!Array.isArray(files)) {
+      throw new Error('Risposta GitHub non valida');
+    }
 
-        files
-        .filter(file => /\.(webp|jpg|jpeg|png)$/i.test(file.name))
-        .forEach(file => {
-            const img = document.createElement('img');
-            img.src = file.download_url;
-            img.loading = 'lazy';
-            gallery.appendChild(img);
-        });
-    })
-    .catch(err => {
-        console.error('Errore caricamento immagini:', err);
-    });
+    const gallery = document.getElementById('gallery');
+
+    files
+      .filter(file => /\.(webp|jpe?g|png)$/i.test(file.name))
+      .forEach(file => {
+        const img = document.createElement('img');
+        img.src = file.download_url;
+        img.loading = 'lazy';
+        gallery.appendChild(img);
+      });
+  })
+  .catch(error => {
+    console.error('Errore caricamento immagini:', error.message);
+  });
 </script>
+
 
 
 <body>
