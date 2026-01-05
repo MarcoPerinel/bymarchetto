@@ -163,26 +163,6 @@ main#gallery img {
     cursor: pointer;
 }
 
-.gallery img::after {
-    content: "Apri";
-    position: absolute;
-    inset: 0;
-    background: rgba(0, 0, 0, 0.55);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 14px;
-    letter-spacing: 1px;
-    text-transform: uppercase;
-    opacity: 0;
-    transition: opacity 0.25s ease;
-    pointer-events: none;
-}
-
-.gallery img:hover::after {
-    opacity: 1;
-}
-
 .lightbox-close {
     position: absolute;
     top: 20px;
@@ -200,8 +180,6 @@ main#gallery img {
 .lightbox-close:hover {
     opacity: 1;
 }
-
-
 
 /*
 ==================================================
