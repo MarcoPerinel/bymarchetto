@@ -222,7 +222,8 @@ Gallery item
 .gallery-item::after {
     content: "Apri";
     position: absolute;
-    inset: 30px 40px 105px;
+    width: 327px !important;
+    height: 480px !important;
     background: rgba(0, 0, 0, 0.55);
     color: #fff;
     display: flex;
