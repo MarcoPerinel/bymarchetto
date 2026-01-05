@@ -92,47 +92,76 @@
 
 <!-- JavaScript -->
 <script>
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
 
     const username = 'MarcoPerinel';
     const repo = 'bymarchetto';
     const branch = 'main';
-    const folder = 'bymarchetto/assets/img';
+    const imagesFolder = 'bymarchetto/assets/img';
+    const captionsUrl = 'assets/data/captions.json';
 
-    const apiUrl = `https://api.github.com/repos/${username}/${repo}/contents/${folder}?ref=${branch}`;
+    const apiUrl = `https://api.github.com/repos/${username}/${repo}/contents/${imagesFolder}?ref=${branch}`;
 
     const gallery = document.getElementById('gallery');
     const lightbox = document.getElementById('lightbox');
     const lightboxImg = lightbox.querySelector('img');
     const closeBtn = lightbox.querySelector('.lightbox-close');
 
+    let captions = [];
+
+    /* ==============================
+       Carica caption
+    ============================== */
+    try {
+        const capRes = await fetch(captionsUrl);
+        captions = await capRes.json();
+    } catch {
+        captions = [];
+    }
+
+    /* ==============================
+       Carica immagini
+    ============================== */
     fetch(apiUrl)
         .then(r => {
             if (!r.ok) throw new Error('GitHub API error');
             return r.json();
         })
         .then(files => {
-            files
-                .filter(f => /\.(webp|jpe?g|png)$/i.test(f.name))
-                .forEach(f => {
-                    const img = document.createElement('img');
-                    img.src = f.download_url;
-                    img.loading = 'lazy';
-                    img.alt = 'Fotografia di By Marchetto';
+            const images = files.filter(f => /\.(webp|jpe?g|png)$/i.test(f.name));
 
-                    img.addEventListener('click', () => {
-                        lightboxImg.src = f.download_url;
-                        lightbox.classList.add('active');
-                        document.body.style.overflow = 'hidden';
-                    });
+            images.forEach((f, index) => {
 
-                    gallery.appendChild(img);
+                const item = document.createElement('div');
+                item.className = 'gallery-item';
+
+                const img = document.createElement('img');
+                img.src = f.download_url;
+                img.loading = 'lazy';
+                img.alt = 'Fotografia di By Marchetto';
+
+                img.addEventListener('click', () => {
+                    lightboxImg.src = f.download_url;
+                    lightbox.classList.add('active');
+                    document.body.style.overflow = 'hidden';
                 });
+
+                const caption = document.createElement('p');
+                caption.className = 'caption';
+                caption.textContent = captions[index] || '';
+
+                item.appendChild(img);
+                item.appendChild(caption);
+                gallery.appendChild(item);
+            });
         })
         .catch(() => {
-            gallery.innerHTML = '<p style="opacity:.6">Immagini temporaneamente non disponibili.</p>';
+            gallery.innerHTML = '<p style="opacity:.6">Gallery non disponibile.</p>';
         });
 
+    /* ==============================
+       Lightbox
+    ============================== */
     function closeLightbox() {
         lightbox.classList.remove('active');
         lightboxImg.src = '';
@@ -149,7 +178,6 @@ document.addEventListener('DOMContentLoaded', () => {
         if (e.key === 'Escape') closeLightbox();
     });
 
-    document.getElementById('year').textContent = new Date().getFullYear();
 });
 </script>
 
