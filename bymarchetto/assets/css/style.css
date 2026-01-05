@@ -186,6 +186,14 @@ main#gallery img {
     opacity: 1;
 }
 
+p.caption {
+    color: black;
+    text-align: center;
+    margin: 15px;
+    font-size: 13px !important;
+    font-family: system-ui;
+}
+
 /*
 ==================================================
 Gallery item
