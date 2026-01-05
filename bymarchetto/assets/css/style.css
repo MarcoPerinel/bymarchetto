@@ -184,7 +184,7 @@ body {
 p.caption {
     color: black;
     text-align: center;
-    margin: 15px;
+    margin: 0px;
     font-size: 13px !important;
     font-family: system-ui;
 }
@@ -222,7 +222,7 @@ Gallery item
 .gallery-item::after {
     content: "Apri";
     position: absolute;
-    inset: 30px 40px 90px;
+    inset: 30px 40px 135px;
     background: rgba(0, 0, 0, 0.55);
     color: #fff;
     display: flex;
