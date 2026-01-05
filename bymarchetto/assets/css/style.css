@@ -126,11 +126,6 @@ body {
     object-position: center;
 }
 
-main#gallery img {
-    background: white;
-    padding: 30px 40px 65px 40px;
-}
-
 .lightbox {
     position: fixed;
     inset: 0;
