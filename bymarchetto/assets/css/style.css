@@ -158,6 +158,11 @@ main#gallery img {
     cursor: zoom-out;
 }
 
+.gallery-item {
+    background: white;
+    padding: 30px 40px 20px 40px;
+}
+
 .gallery img {
     position: relative;
     cursor: pointer;
