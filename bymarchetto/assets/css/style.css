@@ -215,6 +215,10 @@ body {
     gap: 20px;
 }
 
+h4.title-footer {
+    margin-bottom: 10px;
+}
+
 /*
 ==================================================
 8. Responsive
