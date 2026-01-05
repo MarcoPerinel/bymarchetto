@@ -282,8 +282,8 @@ body {
     }
 
     .logo-wrapper img {
-        width: 250px;
-        height: 110px;
+        width: 250px !important;
+        height: 110px !important;
         object-fit: cover;
         object-position: center;
     }
