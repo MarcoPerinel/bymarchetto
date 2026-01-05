@@ -3,19 +3,92 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>bymarchetto.it</title>
-    <meta name="description" content="Showroom fotografico bymarchetto">
+
+    <title>bymarchetto.it | Showroom fotografico</title>
+
+    <meta name="description" content="Showroom fotografico di bymarchetto. Un racconto visivo attraverso paesaggi, dettagli e atmosfere catturate con uno sguardo autentico.">
+    <meta name="robots" content="index, follow">
+    <meta name="author" content="By Marchetto">
+
+    <link rel="canonical" href="https://marcoperinel.github.io/bymarchetto/">
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="bymarchetto.it | Showroom fotografico">
+    <meta property="og:description" content="Un racconto fotografico attraverso la lente. Emozioni, luoghi e dettagli raccontati per immagini.">
+    <meta property="og:url" content="https://marcoperinel.github.io/bymarchetto/">
+    <meta property="og:image" content="https://marcoperinel.github.io/bymarchetto/assets/img/OG-image.webp">
+    <meta property="og:locale" content="it_IT">
+
+    <!-- Twitter / X -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="bymarchetto.it | Showroom fotografico">
+    <meta name="twitter:description" content="Un racconto fotografico fatto di luce, dettagli e silenzi.">
+    <meta name="twitter:image" content="https://marcoperinel.github.io/bymarchetto/assets/img/OG-image.webp">
+
+    <!-- CSS -->
     <link rel="stylesheet" href="assets/css/style.css">
+
+    <!-- Dati strutturati -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Person",
+      "name": "By Marchetto",
+      "url": "https://marcoperinel.github.io/bymarchetto/",
+      "image": "https://marcoperinel.github.io/bymarchetto/assets/img/OG-image.webp",
+      "jobTitle": "Fotografo",
+      "description": "Fotografo e autore di uno showroom visivo che racconta luoghi, dettagli ed emozioni attraverso la lente.",
+      "sameAs": []
+    }
+    </script>
 </head>
 
+<body>
+
+<div class="site-wrapper">
+
+    <header class="site-header">
+        <div class="logo-wrapper">
+            <img src="assets/logo/white-logo.png" alt="By Marchetto logo">
+        </div>
+    </header>
+
+    <section class="intro">
+        <h1>Un racconto attraverso la lente</h1>
+        <p>
+            Nel mio modo di osservare il mondo, la fotografia è molto più di un semplice scatto:
+            è un mezzo per fermare il tempo, per dare voce ai dettagli che altrimenti passerebbero inosservati.
+            Attraverso l’obiettivo, trasformo attimi ordinari in storie visive che parlano di emozioni,
+            di luoghi, di persone. Ogni immagine è il risultato di uno sguardo attento e di una sensibilità
+            allenata a cogliere l’essenza, anche nel silenzio. In questo spazio ti accompagno dentro il mio
+            modo di vedere, dove ogni scatto è un frammento sincero di realtà e immaginazione.
+        </p>
+    </section>
+
+    <main class="gallery" id="gallery"></main>
+
+    <footer class="site-footer">
+        <p>bymarchetto © <span id="year"></span></p>
+
+        <div class="privacy-box">
+            <a href="https://www.iubenda.com/privacy-policy/49726469" title="Privacy Policy">Privacy Policy</a>
+            <a href="https://www.iubenda.com/privacy-policy/49726469/cookie-policy" title="Cookie Policy">Cookie Policy</a>
+        </div>
+    </footer>
+
+</div>
+
+<!-- Lightbox -->
+<div class="lightbox" id="lightbox">
+    <button class="lightbox-close" aria-label="Chiudi">&times;</button>
+    <img src="" alt="">
+</div>
+
+<!-- JavaScript -->
 <script>
 document.addEventListener('DOMContentLoaded', () => {
 
-    /*
-    ==================================================
-    Configurazione GitHub
-    ==================================================
-    */
     const username = 'MarcoPerinel';
     const repo = 'bymarchetto';
     const branch = 'main';
@@ -23,66 +96,37 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const apiUrl = `https://api.github.com/repos/${username}/${repo}/contents/${folder}?ref=${branch}`;
 
-    /*
-    ==================================================
-    Elementi DOM
-    ==================================================
-    */
     const gallery = document.getElementById('gallery');
     const lightbox = document.getElementById('lightbox');
-
-    if (!gallery || !lightbox) {
-        console.error('Gallery o lightbox non trovati nel DOM');
-        return;
-    }
-
     const lightboxImg = lightbox.querySelector('img');
+    const closeBtn = lightbox.querySelector('.lightbox-close');
 
-    /*
-    ==================================================
-    Caricamento immagini
-    ==================================================
-    */
     fetch(apiUrl)
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('GitHub API error ' + response.status);
-            }
-            return response.json();
+        .then(r => {
+            if (!r.ok) throw new Error('GitHub API error');
+            return r.json();
         })
         .then(files => {
-            if (!Array.isArray(files)) {
-                throw new Error('Risposta GitHub non valida');
-            }
-
             files
-                .filter(file => /\.(webp|jpe?g|png)$/i.test(file.name))
-                .forEach(file => {
+                .filter(f => /\.(webp|jpe?g|png)$/i.test(f.name))
+                .forEach(f => {
                     const img = document.createElement('img');
-                    img.src = file.download_url;
+                    img.src = f.download_url;
                     img.loading = 'lazy';
+                    img.alt = 'Fotografia di By Marchetto';
 
                     img.addEventListener('click', () => {
-                        openLightbox(file.download_url);
+                        lightboxImg.src = f.download_url;
+                        lightbox.classList.add('active');
+                        document.body.style.overflow = 'hidden';
                     });
 
                     gallery.appendChild(img);
                 });
         })
-        .catch(error => {
-            console.error('Errore caricamento immagini:', error.message);
+        .catch(() => {
+            gallery.innerHTML = '<p style="opacity:.6">Immagini temporaneamente non disponibili.</p>';
         });
-
-    /*
-    ==================================================
-    Lightbox
-    ==================================================
-    */
-    function openLightbox(src) {
-        lightboxImg.src = src;
-        lightbox.classList.add('active');
-        document.body.style.overflow = 'hidden';
-    }
 
     function closeLightbox() {
         lightbox.classList.remove('active');
@@ -91,68 +135,18 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     lightbox.addEventListener('click', closeLightbox);
-
-    document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape') {
-            closeLightbox();
-        }
+    closeBtn.addEventListener('click', e => {
+        e.stopPropagation();
+        closeLightbox();
     });
 
-    /*
-    ==================================================
-    Anno footer
-    ==================================================
-    */
-    const year = document.getElementById('year');
-    if (year) {
-        year.textContent = new Date().getFullYear();
-    }
+    document.addEventListener('keydown', e => {
+        if (e.key === 'Escape') closeLightbox();
+    });
 
+    document.getElementById('year').textContent = new Date().getFullYear();
 });
 </script>
-
-<body>
-    <div class="site-wrapper">
-        <header class="site-header">
-            <div class="logo-wrapper">
-                <img src="assets/logo/white-logo.png" alt="Logo bymarchetto">
-            </div>
-        </header>
-        
-        <section class="intro">
-            <h1>Un racconto attraverso la lente</h1>
-            <p>
-                Nel mio modo di osservare il mondo, la fotografia è molto più di un semplice scatto:
-                è un mezzo per fermare il tempo, per dare voce ai dettagli che altrimenti passerebbero inosservati.
-                Attraverso l’obiettivo, trasformo attimi ordinari in storie visive che parlano di emozioni,
-                di luoghi, di persone. Ogni immagine è il risultato di uno sguardo attento e di una sensibilità
-                allenata a cogliere l’essenza, anche nel silenzio. In questo spazio ti accompagno dentro il mio
-                modo di vedere, dove ogni scatto è un frammento sincero di realtà e immaginazione.
-            </p>
-        </section>
-    
-        <main class="gallery" id="gallery">
-    
-        </main>
-    
-        <footer class="site-footer">
-            <p>bymarchetto © <span id="year"></span></p>
-            <div class="privacy-box">
-                <a href="https://www.iubenda.com/privacy-policy/49726469" class="iubenda-white iubenda-noiframe iubenda-embed iubenda-noiframe " title="Privacy Policy ">Privacy Policy</a><script type="text/javascript">(function (w,d) {var loader = function () {var s = d.createElement("script"), tag = d.getElementsByTagName("script")[0]; s.src="https://cdn.iubenda.com/iubenda.js"; tag.parentNode.insertBefore(s,tag);}; if(w.addEventListener){w.addEventListener("load", loader, false);}else if(w.attachEvent){w.attachEvent("onload", loader);}else{w.onload = loader;}})(window, document);</script>
-                <a href="https://www.iubenda.com/privacy-policy/49726469/cookie-policy" class="iubenda-white iubenda-noiframe iubenda-embed iubenda-noiframe " title="Cookie Policy ">Cookie Policy</a><script type="text/javascript">(function (w,d) {var loader = function () {var s = d.createElement("script"), tag = d.getElementsByTagName("script")[0]; s.src="https://cdn.iubenda.com/iubenda.js"; tag.parentNode.insertBefore(s,tag);}; if(w.addEventListener){w.addEventListener("load", loader, false);}else if(w.attachEvent){w.attachEvent("onload", loader);}else{w.onload = loader;}})(window, document);</script>
-            </div>
-            
-        </footer>
-    
-        <script>
-            document.getElementById('year').textContent = new Date().getFullYear();
-        </script>
-    </div>
-
-    <div class="lightbox" id="lightbox">
-        <button class="lightbox-close" aria-label="Chiudi">&times;</button>
-        <img src="" alt="">
-    </div>
 
 </body>
 </html>
