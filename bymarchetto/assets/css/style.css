@@ -281,9 +281,11 @@ body {
         padding: 30px 15px;
     }
 
-    .logo-wrapper {
-        flex-direction: column;
-        gap: 20px;
+    .logo-wrapper img {
+        width: 250px;
+        height: 110px;
+        object-fit: cover;
+        object-position: center;
     }
 
     .logo-wrapper img {
