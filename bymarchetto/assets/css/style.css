@@ -265,6 +265,17 @@ a {
    color: white;
 }
 
+a.backtotop {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background: white;
+    color: black;
+    text-decoration: none;
+    padding: 10px 20px;
+    border-radius: 20px;
+}
+
 /*
 ==================================================
 8. Responsive
