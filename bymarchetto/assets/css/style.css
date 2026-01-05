@@ -121,7 +121,7 @@ body {
     height: 450px !important;
     object-fit: cover;
     display: block;
-    border-radius: 4px;
+    border-radius: 0px;
     object-position: center;
 }
 
